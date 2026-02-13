@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>InstantDrop | Secure Real-Time File and Message Sharing</title>
+        <meta
+            name="description"
+            content="InstantDrop is a secure real-time file and message sharing app. Create a room and instantly share up to 50MB files with no signup and no persistent storage." />
+        <meta
+            name="keywords"
+            content="InstantDrop, file sharing, real-time chat, websocket file transfer, secure file transfer, room-based chat, temporary file sharing, instant sharing" />
+        <meta name="author" content="Atul Jadhav" />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
+        <link rel="canonical" href="https://instantdrop.atuljadhav.tech/" />
+        <meta name="theme-color" content="#0a0a0a" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="InstantDrop" />
+        <meta
+            property="og:title"
+            content="InstantDrop | Secure Real-Time File and Message Sharing" />
+        <meta
+            property="og:description"
+            content="Share files and messages instantly with private room IDs over WebSockets. No signup required." />
+        <meta
+            property="og:url"
+            content="https://instantdrop.atuljadhav.tech/" />
+        <meta
+            property="og:image"
+            content="https://instantdrop.atuljadhav.tech/banner.png" />
+        <meta property="og:image:alt" content="InstantDrop sharing interface" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:title"
+            content="InstantDrop | Secure Real-Time File and Message Sharing" />
+        <meta
+            name="twitter:description"
+            content="Share files and messages instantly with private room IDs over WebSockets." />
+        <meta
+            name="twitter:image"
+            content="https://instantdrop.atuljadhav.tech/banner.png" />
+        <meta
+            name="google-site-verification"
+            content="JooqhKtmptjs7-SDy7-iIxFGrfAVDcFMdi-laNk0DnE" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = { darkMode: "class" };
+        </script>
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet" />
+        <style>
+            body {
+                font-family: "Poppins", sans-serif;
+            }
+        </style>
+    </head>
+
+    <body
+        class="bg-neutral-100 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 min-h-screen">
+        <!-- INFORMATION SECTION (FIRST VIEW) -->
+        <section
+            id="infoSection"
+            class="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+            <div class="flex items-center gap-3 mb-6">
+                <img
+                    src="/favicon.ico"
+                    alt="InstantDrop logo"
+                    width="40"
+                    height="40"
+                    class="rounded-lg" />
+                <h1 class="text-4xl md:text-5xl font-semibold tracking-tight">
+                    InstantDrop
+                </h1>
+            </div>
+
+            <p
+                class="max-w-2xl text-neutral-600 dark:text-neutral-400 leading-relaxed mb-10">
+                InstantDrop is a real-time, room-based file and message sharing
+                platform built on WebSockets. It allows you to securely exchange
+                files up to 50MB instantly without accounts, storage, or
+                database persistence. Just create a room ID and start sharing.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mb-12 text-left">
+                <div
+                    class="bg-white dark:bg-neutral-900 p-6 border border-neutral-200 dark:border-neutral-800 rounded-xl">
+                    <h3 class="font-medium mb-2">Private Rooms</h3>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                        Each session is isolated to a unique room ID.
+                    </p>
+                </div>
+                <div
+                    class="bg-white dark:bg-neutral-900 p-6 border border-neutral-200 dark:border-neutral-800 rounded-xl">
+                    <h3 class="font-medium mb-2">Real-Time Speed</h3>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                        Instant message and file delivery through WebSocket
+                        connection.
+                    </p>
+                </div>
+                <div
+                    class="bg-white dark:bg-neutral-900 p-6 border border-neutral-200 dark:border-neutral-800 rounded-xl">
+                    <h3 class="font-medium mb-2">No Storage</h3>
+                    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                        Files are transmitted directly. No server-side saving.
+                    </p>
+                </div>
+            </div>
+
+            <!-- JOIN CARD -->
+            <div
+                class="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8">
+                <h2 class="text-xl font-medium mb-4">Join a Room</h2>
+
+                <input
+                    id="room"
+                    placeholder="Enter room ID"
+                    class="w-full border border-neutral-300 dark:border-neutral-700 px-4 py-2 mb-4 rounded-lg bg-transparent outline-none focus:border-black dark:focus:border-white" />
+
+                <button
+                    id="submit"
+                    class="w-full bg-black dark:bg-white text-white dark:text-black py-2 rounded-lg text-sm transition hover:opacity-90">
+                    Join Now
+                </button>
+            </div>
+        </section>
+
+        <!-- CHAT APPLICATION (HIDDEN INITIALLY) -->
+        <section
+            id="chatApp"
+            class="hidden min-h-screen flex items-center justify-center px-6 py-10">
+            <div
+                class="w-full max-w-6xl h-[85vh] grid grid-cols-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+                <!-- LEFT PANEL -->
+                <div
+                    class="col-span-1 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
+                    <div
+                        class="p-8 border-b border-neutral-200 dark:border-neutral-800">
+                        <h3 class="text-lg font-semibold">Room Controls</h3>
+                    </div>
+
+                    <div class="p-8 flex-grow flex flex-col justify-center">
+                        <button
+                            id="leaveBtn"
+                            class="w-full border border-neutral-300 dark:border-neutral-700 py-2 rounded-lg text-sm hover:bg-neutral-200 dark:hover:bg-neutral-800 transition">
+                            Leave Room
+                        </button>
+                    </div>
+
+                    <div
+                        class="p-6 text-xs text-neutral-400 border-t border-neutral-200 dark:border-neutral-800">
+                        Limit: 50MB<br />
+                        WebSocket Based
+                    </div>
+                </div>
+
+                <!-- RIGHT PANEL -->
+                <div class="col-span-2 flex flex-col">
+                    <div
+                        class="flex items-center justify-between px-8 py-6 border-b border-neutral-200 dark:border-neutral-800">
+                        <div class="text-sm">
+                            Active Room:
+                            <span id="roomLabel" class="font-medium"></span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                id="statusDot"
+                                class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <button
+                                id="themeToggle"
+                                class="text-xs px-3 py-1 border border-neutral-300 dark:border-neutral-700 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
+                                Theme
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        id="messages"
+                        class="flex-grow overflow-y-auto px-10 py-8 space-y-4 bg-neutral-50 dark:bg-neutral-950"></div>
+
+                    <div
+                        class="px-8 py-6 border-t border-neutral-200 dark:border-neutral-800 flex items-center gap-4">
+                        <label
+                            class="cursor-pointer text-sm text-neutral-500 hover:text-black dark:hover:text-white transition">
+                            📎
+                            <input id="file" type="file" hidden />
+                        </label>
+
+                        <input
+                            id="input"
+                            placeholder="Type message..."
+                            class="flex-grow border border-neutral-300 dark:border-neutral-700 px-4 py-2 rounded-full bg-transparent outline-none focus:border-black dark:focus:border-white" />
+
+                        <button
+                            id="textSend"
+                            class="bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full text-sm transition hover:opacity-90">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+            const root = document.documentElement;
+            const themeToggle = document.getElementById("themeToggle");
+            const THEME_KEY = "theme-preference";
+            const systemDarkQuery = window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            );
+
+            function getStoredTheme() {
+                const stored = localStorage.getItem(THEME_KEY);
+                if (stored === "light" || stored === "dark") return stored;
+                return "system";
+            }
+
+            function applyTheme(theme) {
+                const useDark =
+                    theme === "dark" ||
+                    (theme === "system" && systemDarkQuery.matches);
+                root.classList.toggle("dark", useDark);
+            }
+
+            applyTheme(getStoredTheme());
+
+            systemDarkQuery.addEventListener("change", () => {
+                if (getStoredTheme() === "system") {
+                    applyTheme("system");
+                }
+            });
+
+            themeToggle?.addEventListener("click", () => {
+                const nextTheme = root.classList.contains("dark")
+                    ? "light"
+                    : "dark";
+                localStorage.setItem(THEME_KEY, nextTheme);
+                applyTheme(nextTheme);
+            });
+
+            socket.on("connect", () => {
+                const dot = document.getElementById("statusDot");
+                if (dot) dot.classList.replace("bg-red-500", "bg-green-500");
+            });
+
+            const infoSection = document.getElementById("infoSection");
+            const chatApp = document.getElementById("chatApp");
+            const msgList = document.getElementById("messages");
+            const roomInput = document.getElementById("room");
+            const roomLabel = document.getElementById("roomLabel");
+            const leaveBtn = document.getElementById("leaveBtn");
+            const input = document.getElementById("input");
+            const textSendBtn = document.getElementById("textSend");
+
+            // Switches from landing view to room chat view.
+            function enterChat(room) {
+                infoSection.classList.add("hidden");
+                chatApp.classList.remove("hidden");
+                roomLabel.textContent = room;
+            }
+
+            // Returns user to landing view and clears current room messages.
+            function resetToInfo() {
+                msgList.innerHTML = "";
+                chatApp.classList.add("hidden");
+                infoSection.classList.remove("hidden");
+            }
+
+            document.getElementById("submit").onclick = () => {
+                if (roomInput.value) {
+                    socket.emit("joinchat", roomInput.value);
+                    enterChat(roomInput.value);
+                }
+            };
+
+            leaveBtn.onclick = resetToInfo;
+
+            // Sends text message to the active room.
+            function sendTextMessage() {
+                if (input.value) {
+                    socket.emit("chatmessage", {
+                        ip: input.value,
+                        rm: roomInput.value,
+                    });
+                    input.value = "";
+                }
+            }
+
+            textSendBtn.onclick = sendTextMessage;
+
+            // Press Enter in the input to send a message.
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    sendTextMessage();
+                }
+            });
+
+            // Reads file and emits binary payload over socket.
+            document.getElementById("file").onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    socket.emit(
+                        "sendFile",
+                        {
+                            rm: roomInput.value,
+                            file: {
+                                name: file.name,
+                                type: file.type,
+                                data: reader.result,
+                            },
+                        },
+                        (response) => {
+                            if (response?.status !== "ok") {
+                                alert(response?.message || "Upload failed");
+                            }
+                        }
+                    );
+                };
+
+                reader.readAsArrayBuffer(file);
+            };
+
+            // Renders incoming file message card with download link.
+            socket.on("newfile", (data) => {
+                const isMe = data.sender === socket.id;
+
+                const blob = new Blob([data.file.data], {
+                    type: data.file.type,
+                });
+                const url = URL.createObjectURL(blob);
+
+                const fileCard = document.createElement("div");
+                fileCard.className = `max-w-[70%] w-fit p-4 rounded-xl text-sm ${
+                    isMe
+                        ? "bg-black text-white dark:bg-white dark:text-black ml-auto"
+                        : "bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
+                }`;
+                const timeText = document.createElement("div");
+                timeText.className = "text-xs opacity-40 mb-2";
+                timeText.textContent = data.time || "";
+
+                const fileName = document.createElement("div");
+                fileName.className = "font-medium mb-2";
+                fileName.textContent = data.file?.name || "Shared file";
+
+                const downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = data.file?.name || "download";
+                downloadLink.className = "underline text-blue-500";
+                downloadLink.textContent = "Download File";
+
+                fileCard.appendChild(timeText);
+                fileCard.appendChild(fileName);
+                fileCard.appendChild(downloadLink);
+
+                msgList.appendChild(fileCard);
+                msgList.scrollTop = msgList.scrollHeight;
+            });
+
+            // Receive text
+            socket.on("newmsg", (data) => {
+                const isMe = data.sender === socket.id;
+                const bubble = document.createElement("div");
+                bubble.className = `max-w-[70%] w-fit px-4 py-2 rounded-xl text-sm ${
+                    isMe
+                        ? "bg-black text-white dark:bg-white dark:text-black ml-auto"
+                        : "bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
+                }`;
+                const timeText = document.createElement("div");
+                timeText.className = "text-xs opacity-40 mb-1";
+                timeText.textContent = data.time || "";
+
+                const messageText = document.createElement("div");
+                messageText.textContent = data.text || "";
+
+                bubble.appendChild(timeText);
+                bubble.appendChild(messageText);
+                msgList.appendChild(bubble);
+                msgList.scrollTop = msgList.scrollHeight;
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://instantdrop.atuljadhav.tech/sitemap.xml
