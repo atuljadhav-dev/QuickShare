@@ -71,7 +71,7 @@
         <!-- INFORMATION SECTION (FIRST VIEW) -->
         <section
             id="infoSection"
-            class="min-h-screen flex flex-col items-center justify-center px-6 text-center">
+            class="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-10 text-center">
             <div class="flex items-center gap-3 mb-6">
                 <img
                     src="/favicon.ico"
@@ -92,7 +92,8 @@
                 database persistence. Just create a room ID and start sharing.
             </p>
 
-            <div class="grid md:grid-cols-3 gap-6 max-w-4xl mb-12 text-left">
+            <div
+                class="grid md:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mb-10 sm:mb-12 text-left">
                 <div
                     class="bg-white dark:bg-neutral-900 p-6 border border-neutral-200 dark:border-neutral-800 rounded-xl">
                     <h3 class="font-medium mb-2">Private Rooms</h3>
@@ -119,7 +120,7 @@
 
             <!-- JOIN CARD -->
             <div
-                class="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-8">
+                class="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 sm:p-8">
                 <h2 class="text-xl font-medium mb-4">Join a Room</h2>
 
                 <input
@@ -138,44 +139,58 @@
         <!-- CHAT APPLICATION (HIDDEN INITIALLY) -->
         <section
             id="chatApp"
-            class="hidden min-h-screen flex items-center justify-center px-6 py-10">
+            class="hidden fixed inset-0 sm:relative sm:min-h-screen bg-neutral-100 dark:bg-neutral-950 z-50 sm:z-auto flex sm:items-center justify-center">
             <div
-                class="w-full max-w-6xl h-[85vh] grid grid-cols-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+                class="w-full h-full sm:h-[85vh] sm:max-w-6xl lg:grid flex flex-col lg:grid-cols-3 bg-white dark:bg-neutral-900 sm:border border-neutral-200 dark:border-neutral-800 sm:rounded-2xl overflow-hidden sm:shadow-xl">
                 <!-- LEFT PANEL -->
                 <div
-                    class="col-span-1 border-r border-neutral-200 dark:border-neutral-800 flex flex-col">
-                    <div
-                        class="p-8 border-b border-neutral-200 dark:border-neutral-800">
-                        <h3 class="text-lg font-semibold">Room Controls</h3>
-                    </div>
-
-                    <div class="p-8 flex-grow flex flex-col justify-center">
+                    class="lg:col-span-1 border-b lg:border-b-0 lg:border-r border-neutral-200 dark:border-neutral-800 flex flex-col lg:h-auto bg-white dark:bg-neutral-900">
+                    <!-- Mobile Compact Header -->
                         <button
-                            id="leaveBtn"
-                            class="w-full border border-neutral-300 dark:border-neutral-700 py-2 rounded-lg text-sm hover:bg-neutral-200 dark:hover:bg-neutral-800 transition">
-                            Leave Room
+                            id="leaveBtnMobile"
+                            class="text-xs px-4 py-3 lg:hidden border-b border-neutral-200 dark:border-neutral-800 border rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-800 transition">
+                            Leave
                         </button>
-                    </div>
+                    
 
-                    <div
-                        class="p-6 text-xs text-neutral-400 border-t border-neutral-200 dark:border-neutral-800">
-                        Limit: 50MB<br />
-                        WebSocket Based
+                    <!-- Desktop Version -->
+                    <div class="hidden lg:flex flex-col flex-grow">
+                        <div
+                            class="p-8 border-b border-neutral-200 dark:border-neutral-800">
+                            <h3 class="text-lg font-semibold">Room Controls</h3>
+                        </div>
+
+                        <div class="p-8 flex-grow flex flex-col justify-center">
+                            <button
+                                id="leaveBtn"
+                                class="w-full border border-neutral-300 dark:border-neutral-700 py-2 rounded-lg text-sm hover:bg-neutral-200 dark:hover:bg-neutral-800 transition">
+                                Leave Room
+                            </button>
+                        </div>
+
+                        <div
+                            class="p-6 text-xs text-neutral-400 border-t border-neutral-200 dark:border-neutral-800">
+                            Limit: 50MB<br />
+                            WebSocket Based
+                        </div>
                     </div>
                 </div>
 
                 <!-- RIGHT PANEL -->
-                <div class="col-span-2 flex flex-col">
+                <div class="lg:col-span-2 flex flex-col flex-1 min-h-0">
+                    <!-- HEADER -->
                     <div
-                        class="flex items-center justify-between px-8 py-6 border-b border-neutral-200 dark:border-neutral-800">
-                        <div class="text-sm">
+                        class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-4 border-b border-neutral-200 dark:border-neutral-800">
+                        <div class="text-sm break-all max-w-[65%]">
                             Active Room:
                             <span id="roomLabel" class="font-medium"></span>
                         </div>
+
                         <div class="flex items-center gap-4">
                             <div
                                 id="statusDot"
                                 class="w-3 h-3 bg-red-500 rounded-full"></div>
+
                             <button
                                 id="themeToggle"
                                 class="text-xs px-3 py-1 border border-neutral-300 dark:border-neutral-700 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
@@ -184,12 +199,14 @@
                         </div>
                     </div>
 
+                    <!-- MESSAGES -->
                     <div
                         id="messages"
-                        class="flex-grow overflow-y-auto px-10 py-8 space-y-4 bg-neutral-50 dark:bg-neutral-950"></div>
+                        class="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-6 space-y-4 bg-neutral-50 dark:bg-neutral-950"></div>
 
+                    <!-- INPUT -->
                     <div
-                        class="px-8 py-6 border-t border-neutral-200 dark:border-neutral-800 flex items-center gap-4">
+                        class="px-4 sm:px-6 lg:px-8 py-4 border-t border-neutral-200 dark:border-neutral-800 flex items-center gap-3 bg-white dark:bg-neutral-900 sticky bottom-0">
                         <label
                             class="cursor-pointer text-sm text-neutral-500 hover:text-black dark:hover:text-white transition">
                             📎
@@ -199,7 +216,7 @@
                         <input
                             id="input"
                             placeholder="Type message..."
-                            class="flex-grow border border-neutral-300 dark:border-neutral-700 px-4 py-2 rounded-full bg-transparent outline-none focus:border-black dark:focus:border-white" />
+                            class="flex-1 border border-neutral-300 dark:border-neutral-700 px-4 py-2 rounded-full bg-transparent outline-none focus:border-black dark:focus:border-white" />
 
                         <button
                             id="textSend"
@@ -261,6 +278,7 @@
             const roomInput = document.getElementById("room");
             const roomLabel = document.getElementById("roomLabel");
             const leaveBtn = document.getElementById("leaveBtn");
+            const leaveBtnMobile = document.getElementById("leaveBtnMobile");
             const input = document.getElementById("input");
             const textSendBtn = document.getElementById("textSend");
 
@@ -286,6 +304,7 @@
             };
 
             leaveBtn.onclick = resetToInfo;
+            leaveBtnMobile.onclick = resetToInfo;
 
             // Sends text message to the active room.
             function sendTextMessage() {
@@ -347,7 +366,7 @@
                 const url = URL.createObjectURL(blob);
 
                 const fileCard = document.createElement("div");
-                fileCard.className = `max-w-[70%] w-fit p-4 rounded-xl text-sm ${
+                fileCard.className = `max-w-[85%] sm:max-w-[70%] w-fit p-4 rounded-xl text-sm ${
                     isMe
                         ? "bg-black text-white dark:bg-white dark:text-black ml-auto"
                         : "bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
@@ -378,7 +397,7 @@
             socket.on("newmsg", (data) => {
                 const isMe = data.sender === socket.id;
                 const bubble = document.createElement("div");
-                bubble.className = `max-w-[70%] w-fit px-4 py-2 rounded-xl text-sm ${
+                bubble.className = `w-fit max-w-[85%] sm:max-w-[70%] px-4 py-2 rounded-xl text-sm ${
                     isMe
                         ? "bg-black text-white dark:bg-white dark:text-black ml-auto"
                         : "bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
