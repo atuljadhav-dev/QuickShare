@@ -234,6 +234,7 @@
             const root = document.documentElement;
             const themeToggle = document.getElementById("themeToggle");
             const THEME_KEY = "theme-preference";
+            const MAX_FILE_SIZE = 50 * 1024 * 1024;
             const systemDarkQuery = window.matchMedia(
                 "(prefers-color-scheme: dark)"
             );
@@ -271,6 +272,10 @@
                 const dot = document.getElementById("statusDot");
                 if (dot) dot.classList.replace("bg-red-500", "bg-green-500");
             });
+            socket.on("disconnect", () => {
+                const dot = document.getElementById("statusDot");
+                if (dot) dot.classList.replace("bg-green-500", "bg-red-500");
+            });
 
             const infoSection = document.getElementById("infoSection");
             const chatApp = document.getElementById("chatApp");
@@ -297,9 +302,11 @@
             }
 
             document.getElementById("submit").onclick = () => {
-                if (roomInput.value) {
-                    socket.emit("joinchat", roomInput.value);
-                    enterChat(roomInput.value);
+                const room = roomInput.value.trim();
+                if (room) {
+                    roomInput.value = room;
+                    socket.emit("joinchat", room);
+                    enterChat(room);
                 }
             };
 
@@ -308,9 +315,10 @@
 
             // Sends text message to the active room.
             function sendTextMessage() {
-                if (input.value) {
+                const text = input.value.trim();
+                if (text && roomInput.value) {
                     socket.emit("chatmessage", {
-                        ip: input.value,
+                        ip: text,
                         rm: roomInput.value,
                     });
                     input.value = "";
@@ -331,6 +339,16 @@
             document.getElementById("file").onchange = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
+                if (file.size > MAX_FILE_SIZE) {
+                    alert("File exceeds 50MB limit");
+                    e.target.value = "";
+                    return;
+                }
+                if (!roomInput.value) {
+                    alert("Join a room before sending files");
+                    e.target.value = "";
+                    return;
+                }
 
                 const reader = new FileReader();
 
@@ -384,6 +402,9 @@
                 downloadLink.download = data.file?.name || "download";
                 downloadLink.className = "underline text-blue-500";
                 downloadLink.textContent = "Download File";
+                downloadLink.addEventListener("click", () => {
+                    setTimeout(() => URL.revokeObjectURL(url), 0);
+                });
 
                 fileCard.appendChild(timeText);
                 fileCard.appendChild(fileName);
